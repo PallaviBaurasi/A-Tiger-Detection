@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URL=sqlite:///./pench_wildlife.db
+      - JWT_SECRET=pench_reserve_secret_key_2026_super_secure
+      - ML_MODE=demo
+      - BLANK_THRESHOLD=0.90
+      - MATCH_THRESHOLD=0.85
+      - REVIEW_THRESHOLD=0.65
+    volumes:
+      - ./backend/storage:/app/storage
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
