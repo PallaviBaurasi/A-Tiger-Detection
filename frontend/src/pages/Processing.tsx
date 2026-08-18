@@ -112,70 +112,80 @@ export const Processing: React.FC = () => {
         <div>
           <div className="flex items-center gap-2 text-emerald-300 text-xs font-bold uppercase tracking-wider mb-1">
             <Zap className="w-4 h-4" />
-            <span>Roboflow AI Powered Triage Engine</span>
+            <span>Neural Vision AI Triage Engine</span>
           </div>
           <h1 className="text-2xl font-bold font-serif">
             Tiger Image Processing Wizard
           </h1>
           <p className="text-xs text-emerald-100 mt-1 max-w-xl">
-            Upload camera trap images to automatically filter blanks into safe quarantine, detect tigers with your Roboflow AI model, and match stripe patterns against registered tigers.
+            Upload raw camera trap batch captures. AI will automatically quarantine blank frames, detect tigers and other wildlife, extract distinctive stripe biometric patterns, and assess movement risk.
           </p>
         </div>
 
         <button
           onClick={handleQuickDemoPreset}
           type="button"
-          className="px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-extrabold text-xs rounded-xl shadow-lg flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap self-start md:self-center"
+          className="px-4 py-2.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-200 border border-emerald-400/30 rounded-xl text-xs font-bold transition-all flex items-center gap-2 shrink-0 cursor-pointer"
         >
-          <Sparkles className="w-4 h-4 fill-slate-900" />
+          <Sparkles className="w-4 h-4 text-emerald-300" />
           <span>Quick 1-Click Demo Batch</span>
         </button>
       </div>
 
-      {/* Main Upload Box */}
-      <div className="bg-white p-6 rounded-2xl border border-forest-100 shadow-sm space-y-6">
+      {/* Main Upload Card */}
+      <div className="bg-white rounded-2xl border border-forest-100 shadow-md p-6 space-y-6">
         <form onSubmit={handleStartProcessing} className="space-y-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Station & Survey Metadata Selector */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                <Camera className="w-4 h-4 text-forest-700" />
-                <span>Camera Station Location</span>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                Deploying Camera Station *
               </label>
-              <select
-                value={selectedStationId}
-                onChange={(e) => setSelectedStationId(Number(e.target.value))}
-                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:bg-white focus:border-forest-600 focus:outline-none"
-              >
-                {stations.map(s => (
-                  <option key={s.id} value={s.id}>
-                    {s.station_code} - {s.station_name} ({s.region_type})
-                  </option>
-                ))}
-              </select>
+              <div className="relative">
+                <select
+                  value={selectedStationId}
+                  onChange={(e) => setSelectedStationId(Number(e.target.value))}
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 appearance-none"
+                >
+                  {stations.map(stn => (
+                    <option key={stn.id} value={stn.id}>
+                      {stn.station_code} — {stn.station_name} ({stn.region_type} Zone)
+                    </option>
+                  ))}
+                </select>
+                <Camera className="w-4 h-4 text-slate-400 absolute right-4 top-3.5 pointer-events-none" />
+              </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                Batch Timestamp
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                Capture Timestamp & Shift
               </label>
               <input
                 type="datetime-local"
                 value={capturedAt}
                 onChange={(e) => setCapturedAt(e.target.value)}
-                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:bg-white focus:border-forest-600 focus:outline-none"
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>
           </div>
 
-          {/* Upload Drop Zone */}
-          <div className="border-2 border-dashed border-forest-300 hover:border-forest-600 bg-forest-50/40 rounded-2xl p-8 text-center transition-all relative">
+          {/* Drag & Drop File Zone */}
+          <div
+            onClick={() => document.getElementById('camera-trap-file-input')?.click()}
+            className={`border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all ${
+              files.length > 0
+                ? 'border-emerald-500 bg-emerald-50/20'
+                : 'border-slate-300 hover:border-emerald-500 hover:bg-forest-50/30'
+            }`}
+          >
             <input
+              id="camera-trap-file-input"
               type="file"
               multiple
               accept="image/*"
+              className="hidden"
               onChange={(e) => handleFileChange(e.target.files)}
-              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-              id="file-input"
             />
 
             <div className="w-14 h-14 mx-auto rounded-full bg-forest-100 text-forest-700 flex items-center justify-center mb-3">
@@ -222,12 +232,12 @@ export const Processing: React.FC = () => {
             {isUploading ? (
               <>
                 <RefreshCw className="w-5 h-5 animate-spin text-emerald-400" />
-                <span>Running Roboflow AI Triage...</span>
+                <span>Running Neural Vision AI Triage...</span>
               </>
             ) : (
               <>
                 <Play className="w-5 h-5 fill-white" />
-                <span>Run Roboflow Tiger Detection & Triage</span>
+                <span>Run Tiger Detection & Wildlife Triage</span>
               </>
             )}
           </button>
@@ -242,7 +252,7 @@ export const Processing: React.FC = () => {
             </div>
             <div className={`p-3 rounded-xl border flex items-center gap-2 ${activeStep >= 2 ? 'bg-emerald-50 border-emerald-300 text-emerald-900' : 'bg-slate-50 border-slate-200 text-slate-400'}`}>
               <Sparkles className="w-4 h-4 text-emerald-600" />
-              <span>2. Roboflow AI Detection</span>
+              <span>2. Multi-Class Detection</span>
             </div>
             <div className={`p-3 rounded-xl border flex items-center gap-2 ${activeStep >= 3 ? 'bg-emerald-50 border-emerald-300 text-emerald-900' : 'bg-slate-50 border-slate-200 text-slate-400'}`}>
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
@@ -266,7 +276,7 @@ export const Processing: React.FC = () => {
                   <CheckCircle className="w-5 h-5 text-emerald-600" />
                 </h3>
                 <p className="text-xs text-slate-500">
-                  Total Processing Time: {runResult.processing_time} seconds • Roboflow Model: Active
+                  Total Processing Time: {runResult.processing_time} seconds • Neural Vision AI: Active
                 </p>
               </div>
             </div>

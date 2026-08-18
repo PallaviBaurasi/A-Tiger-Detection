@@ -15,6 +15,7 @@ from app.ml.stripe_matcher import StripeMatcher
 from app.gis.spatial_engine import SpatialEngine
 from app.alerts.alert_engine import AlertEngine
 from app.services.storage_service import StorageService
+from app.services.emergency_alert_service import EmergencyAlertService
 
 class TriageService:
     def __init__(self, db: Session):
@@ -157,6 +158,22 @@ class TriageService:
                         for a in alerts:
                             alert_obj = Alert(**a)
                             self.db.add(alert_obj)
+                            self.db.flush()  # get alert_obj.id
+
+                            # ── Emergency Response Hook ──────────────────────────
+                            # If the alert is CRITICAL, trigger the automated call
+                            # workflow in a background thread. This is non-blocking.
+                            if alert_obj.severity == "CRITICAL":
+                                try:
+                                    EmergencyAlertService.handle_critical_alert(
+                                        self.db, alert_obj
+                                    )
+                                except Exception as ex:
+                                    import logging
+                                    logging.getLogger(__name__).warning(
+                                        f"Emergency call hook failed for alert {alert_obj.id}: {ex}"
+                                    )
+                            # ────────────────────────────────────────────────────
 
                     elif match_res["decision"] == "HUMAN_REVIEW":
                         review_cnt += 1

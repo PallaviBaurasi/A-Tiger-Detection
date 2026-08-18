@@ -32,12 +32,6 @@ export const Header: React.FC = () => {
             Pench Tiger Reserve • Madhya Pradesh Forest Department
           </p>
         </div>
-
-        {/* Roboflow Model Active Pill */}
-        <div className="hidden xl:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-300/80 shadow-sm">
-          <Sparkles className="w-4 h-4 text-emerald-600 animate-pulse" />
-          <span>Roboflow AI: <span className="font-mono text-emerald-900 font-extrabold">find-tiger-hdm2r</span> Active</span>
-        </div>
       </div>
 
       {/* Global Search & Officer Status Profile */}

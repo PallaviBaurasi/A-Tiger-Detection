@@ -57,9 +57,10 @@ async def create_processing_run(
         db.refresh(img)
         image_ids.append(img.id)
 
-    # Launch processing pipeline task
+    # Execute processing pipeline directly
     triage_service = TriageService(db)
-    background_tasks.add_task(triage_service.process_run, run.id, image_ids)
+    triage_service.process_run(run.id, image_ids)
+    db.refresh(run)
 
     return run
 

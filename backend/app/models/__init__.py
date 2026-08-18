@@ -6,6 +6,8 @@ from app.models.tiger import Tiger, TigerCapture, TigerMovementObservation, Tige
 from app.models.run import ProcessingRun
 from app.models.alert import Alert
 from app.models.audit import AuditLog
+# Emergency Response System tables
+from app.models.emergency import EmergencyContact, EmergencyCallEvent, CallAttempt
 
 __all__ = [
     "User",
@@ -18,5 +20,9 @@ __all__ = [
     "TigerAreaStatistics",
     "ProcessingRun",
     "Alert",
-    "AuditLog"
+    "AuditLog",
+    # Emergency Response
+    "EmergencyContact",
+    "EmergencyCallEvent",
+    "CallAttempt",
 ]

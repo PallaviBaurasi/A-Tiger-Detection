@@ -136,3 +136,74 @@ export interface DashboardMetrics {
   recent_captures: any[];
   tigers_summary: any[];
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Emergency Response System Types
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface EmergencyContact {
+  id: number;
+  name: string;
+  role: string;
+  primary_phone_masked: string;
+  secondary_phone_masked?: string;
+  priority: number;
+  is_active: boolean;
+  notes?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CallAttempt {
+  id: number;
+  call_event_id: number;
+  contact_id?: number;
+  attempt_number: number;
+  phone_dialed?: string;
+  attempt_type: 'PRIMARY' | 'SECONDARY' | 'RETRY' | 'ESCALATION' | 'DEMO';
+  status: 'INITIATED' | 'ANSWERED' | 'NO_ANSWER' | 'BUSY' | 'FAILED' | 'DEMO_SUCCESS' | 'MOCK';
+  provider_call_id?: string;
+  error_message?: string;
+  initiated_at: string;
+  completed_at?: string;
+  duration_seconds?: number;
+}
+
+export interface EmergencyCallEvent {
+  id: number;
+  alert_id: number;
+  alert_type: string;
+  risk_level: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
+  reason?: string;
+  tiger_id?: number;
+  tiger_code?: string;
+  camera_id?: string;
+  zone?: string;
+  detected_at?: string;
+  selected_contact_id?: number;
+  selected_contact_name?: string;
+  call_status: 'PENDING' | 'CALLING' | 'ANSWERED' | 'NO_ANSWER' | 'FAILED' | 'ESCALATED' | 'DEMO_SUCCESS' | 'MOCK_SENT';
+  provider_call_id?: string;
+  retry_count: number;
+  max_retries: number;
+  is_demo: boolean;
+  acknowledged: boolean;
+  acknowledged_at?: string;
+  acknowledged_by?: string;
+  created_at: string;
+  updated_at: string;
+  attempts: CallAttempt[];
+}
+
+export interface EmergencySystemStatus {
+  demo_mode: boolean;
+  voice_provider: string;
+  provider_configured: boolean;
+  max_retries: number;
+  cooldown_minutes: number;
+  call_timeout_seconds: number;
+  active_contacts_count: number;
+  total_events_today: number;
+  pending_acknowledgements: number;
+}
+

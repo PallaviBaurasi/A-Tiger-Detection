@@ -18,7 +18,8 @@ from app.routers import (
     map as map_router,
     alerts,
     reports,
-    settings as settings_router
+    settings as settings_router,
+    emergency,
 )
 
 # Initialize Database Schema & Seed Data
@@ -62,6 +63,7 @@ app.include_router(map_router.router, prefix=settings.API_V1_STR)
 app.include_router(alerts.router, prefix=settings.API_V1_STR)
 app.include_router(reports.router, prefix=settings.API_V1_STR)
 app.include_router(settings_router.router, prefix=settings.API_V1_STR)
+app.include_router(emergency.router, prefix=settings.API_V1_STR)
 
 @app.get("/")
 def root():

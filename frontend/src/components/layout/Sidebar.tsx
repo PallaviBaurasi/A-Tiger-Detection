@@ -13,7 +13,8 @@ import {
   Users,
   ShieldCheck,
   Zap,
-  Activity
+  Activity,
+  PhoneCall,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -23,13 +24,14 @@ export const Sidebar: React.FC = () => {
   const mainNav = [
     { to: '/dashboard', label: 'Dashboard Overview', icon: LayoutDashboard },
     { to: '/profile', label: 'Officer Profile & Shift', icon: UserCheck, badge: 'Active' },
-    { to: '/processing', label: 'Tiger Triage Wizard', icon: PlayCircle, badge: 'Roboflow AI' },
+    { to: '/processing', label: 'Tiger Triage Wizard', icon: PlayCircle, badge: 'AI Vision' },
     { to: '/images', label: 'Quarantine & Vault', icon: ImageIcon },
     { to: '/review', label: 'Human Review Queue', icon: UserCheck, countBadge: '4' },
     { to: '/tigers', label: 'Tiger Catalogue', icon: Trees },
     { to: '/map', label: 'GIS Movement Map', icon: MapIcon },
     { to: '/stations', label: 'Camera Stations', icon: Activity },
     { to: '/alerts', label: 'Alert Triage Center', icon: AlertTriangle, countBadge: '4' },
+    { to: '/emergency', label: 'Emergency Response', icon: PhoneCall, badge: '🚨' },
     { to: '/reports', label: 'Intelligence Reports', icon: FileText },
     { to: '/settings', label: 'AI Threshold Settings', icon: Settings },
   ];

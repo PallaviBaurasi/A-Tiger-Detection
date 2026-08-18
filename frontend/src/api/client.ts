@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-const API_BASE_URL = '/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8080/api';
 
 export const apiClient = axios.create({
-  baseURL: 'http://127.0.0.1:8080/api',
+  baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -152,6 +152,71 @@ export const fetchCurrentOfficer = async () => {
 
 export const fetchDashboardMetrics = async () => {
   const res = await apiClient.get('/dashboard');
+  return res.data;
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Emergency Response System API
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const fetchEmergencyStatus = async () => {
+  const res = await apiClient.get('/emergency/status');
+  return res.data;
+};
+
+export const fetchEmergencyContacts = async () => {
+  const res = await apiClient.get('/emergency/contacts');
+  return res.data;
+};
+
+export const createEmergencyContact = async (data: {
+  name: string; role: string; primary_phone: string;
+  secondary_phone?: string; priority: number; is_active: boolean; notes?: string;
+}) => {
+  const res = await apiClient.post('/emergency/contacts', data);
+  return res.data;
+};
+
+export const updateEmergencyContact = async (id: number, data: Partial<{
+  name: string; role: string; primary_phone: string;
+  secondary_phone: string; priority: number; is_active: boolean; notes: string;
+}>) => {
+  const res = await apiClient.put(`/emergency/contacts/${id}`, data);
+  return res.data;
+};
+
+export const deleteEmergencyContact = async (id: number) => {
+  await apiClient.delete(`/emergency/contacts/${id}`);
+};
+
+export const fetchEmergencyEvents = async (params?: {
+  risk_level?: string; call_status?: string; acknowledged?: boolean; limit?: number;
+}) => {
+  const res = await apiClient.get('/emergency/events', { params });
+  return res.data;
+};
+
+export const fetchEmergencyEvent = async (id: number) => {
+  const res = await apiClient.get(`/emergency/events/${id}`);
+  return res.data;
+};
+
+export const acknowledgeEmergencyEvent = async (id: number, acknowledgedBy: string) => {
+  const res = await apiClient.post(`/emergency/events/${id}/acknowledge`, {
+    acknowledged_by: acknowledgedBy,
+  });
+  return res.data;
+};
+
+export const triggerTestCall = async (contactId?: number) => {
+  const params = contactId ? { contact_id: contactId } : {};
+  const res = await apiClient.post('/emergency/test-call', null, { params });
+  return res.data;
+};
+
+export const triggerTestMessage = async (contactId?: number) => {
+  const params = contactId ? { contact_id: contactId } : {};
+  const res = await apiClient.post('/emergency/test-message', null, { params });
   return res.data;
 };
 

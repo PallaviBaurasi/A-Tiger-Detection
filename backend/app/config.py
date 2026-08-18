@@ -37,10 +37,33 @@ class Settings(BaseSettings):
     BUFFER_RANGE_THRESHOLD: float = float(os.getenv("BUFFER_RANGE_THRESHOLD", "5.0"))
     PROLONGED_ABSENCE_DAYS: int = int(os.getenv("PROLONGED_ABSENCE_DAYS", "30"))
 
+    # ──────────────────────────────────────────────────────────────────────
+    # Emergency Response System
+    # ──────────────────────────────────────────────────────────────────────
+    # Set EMERGENCY_DEMO_MODE=false only when Twilio credentials are configured
+    EMERGENCY_DEMO_MODE: bool = os.getenv("EMERGENCY_DEMO_MODE", "true").lower() == "true"
+
+    # Voice provider: "twilio" | "mock"
+    VOICE_PROVIDER: str = os.getenv("VOICE_PROVIDER", "mock")
+
+    # Twilio credentials — leave blank; set via environment variables only
+    TWILIO_ACCOUNT_SID: str = os.getenv("TWILIO_ACCOUNT_SID", "")
+    TWILIO_AUTH_TOKEN: str = os.getenv("TWILIO_AUTH_TOKEN", "")
+    TWILIO_FROM_NUMBER: str = os.getenv("TWILIO_FROM_NUMBER", "")
+
+    # Call behaviour
+    EMERGENCY_MAX_RETRIES: int = int(os.getenv("EMERGENCY_MAX_RETRIES", "3"))
+    EMERGENCY_COOLDOWN_MINUTES: int = int(os.getenv("EMERGENCY_COOLDOWN_MINUTES", "60"))
+    EMERGENCY_CALL_TIMEOUT: int = int(os.getenv("EMERGENCY_CALL_TIMEOUT", "30"))
+
     class Config:
         case_sensitive = True
+        env_file = ".env"
+        env_file_encoding = "utf-8"
+        extra = "ignore"
 
 settings = Settings()
+
 
 # Ensure directories exist
 for path in [settings.STORAGE_PATH, settings.RAW_PATH, settings.RETAINED_PATH, 

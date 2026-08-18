@@ -14,6 +14,7 @@ import { TigerDetail } from './pages/TigerDetail';
 import { Stations } from './pages/Stations';
 import { MapView } from './pages/MapView';
 import { Alerts } from './pages/Alerts';
+import { EmergencyAlerts } from './pages/EmergencyAlerts';
 import { Reports } from './pages/Reports';
 import { Settings } from './pages/Settings';
 import { AdminUsers } from './pages/AdminUsers';
@@ -43,6 +44,7 @@ const ProtectedLayout: React.FC = () => {
             <Route path="/stations" element={<Stations />} />
             <Route path="/map" element={<MapView />} />
             <Route path="/alerts" element={<Alerts />} />
+            <Route path="/emergency" element={<EmergencyAlerts />} />
             <Route path="/reports" element={<Reports />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/admin/users" element={<AdminUsers />} />
